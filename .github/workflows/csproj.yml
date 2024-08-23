@@ -22,6 +22,7 @@ jobs:
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
+        key: keepass-2.57
         path: |
           \Temp\KeePass-2.57.zip
 
@@ -35,9 +36,7 @@ jobs:
 
     - name: Build app for release
       run: |-
-        & "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe" --debug --plgx-create "$(Get-Location)"
-        ls
-        ls "$(Get-Location)"
+        & "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe" --debug --plgx-create "$(Get-Location)\AutoTypeSplitter"
         
     - name: Build app for release
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -property:Configuration=Release
