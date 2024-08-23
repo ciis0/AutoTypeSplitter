@@ -19,10 +19,18 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
 
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: |
+          \Temp\KeePass-2.57.zip
+
     - name: keepass
       run: |-
-        curl.exe -fsSL https://downloads.sourceforge.net/project/keepass/KeePass%202.x/2.57/KeePass-2.57.zip -o \Temp\KeePass.zip
-        Expand-Archive -Path \Temp\KeePass.zip -DestinationPath "C:\Program Files (x86)\KeePass Password Safe 2"
+        if(!$(Test-Path \Temp\KeePass-2.57.zip -PathType Leaf)){
+          curl.exe -fsSL https://github.com/ciis0/actions-files/raw/main/KeePass-2.57.zip -o \Temp\KeePass-2.57.zip
+        }
+        Expand-Archive -Path \Temp\KeePass-2.57.zip -DestinationPath "C:\Program Files (x86)\KeePass Password Safe 2"
     
     - name: Build app for release
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
