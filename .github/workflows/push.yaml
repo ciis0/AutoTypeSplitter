@@ -45,7 +45,7 @@ jobs:
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -property:Configuration=Release
 
     - name: cosign
-      run:
+      run: |-
         cosign sign-blob --yes AutoTypeSplitter.plgx --bundle AutoTypeSplitter.plgx.bundle
         cosign sign-blob --yes AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll --bundle AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll.bundle
 
