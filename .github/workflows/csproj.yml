@@ -35,7 +35,8 @@ jobs:
 
     - name: Build app for release
       run: |-
-        & "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe" --plgx-create $env:GITHUB_WORKSPACE
+        & "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe" --plgx-create "$(Get-Location)"
+        ls
         
     - name: Build app for release
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -property:Configuration=Release
