@@ -1,0 +1,48 @@
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+  
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Cache KeePass
+      uses: actions/cache@v3
+      with:
+        key: v2-keepass-2.57
+        path: |
+          KeePass-2.57.zip
+
+    - name: keepass
+      run: |-
+        if(!$(Test-Path KeePass-2.57.zip -PathType Leaf)){
+          curl.exe -fsSLO https://github.com/ciis0/actions-files/raw/main/KeePass-2.57.zip
+        }
+        Expand-Archive -Path KeePass-2.57.zip -DestinationPath "C:\Program Files (x86)\KeePass Password Safe 2"
+
+    - name: Build plgx
+      run: |-
+        & "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe" --debug --plgx-create "$(Get-Location)\AutoTypeSplitter"
+        
+    - name: Build dll
+      run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -property:Configuration=Release
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifacts
+        path: |
+          AutoTypeSplitter.plgx
+          AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll
+
