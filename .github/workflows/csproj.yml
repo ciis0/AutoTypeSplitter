@@ -20,6 +20,6 @@ jobs:
       uses: microsoft/setup-msbuild@v2
     
     - name: Build app for release
-      run: msbuild sAutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
+      run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
 
 
