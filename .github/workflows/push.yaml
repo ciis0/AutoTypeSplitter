@@ -17,6 +17,9 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
 
+    - name: Install cosign
+      uses: sigstore/cosign-installer@v3.6.0
+
     - name: Cache KeePass
       uses: actions/cache@v3
       with:
@@ -38,11 +41,16 @@ jobs:
     - name: Build dll
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -property:Configuration=Release
 
+    - name: cosign
+      run:
+        cosign sign-blob AutoTypeSplitter.plgx --output AutoTypeSplitter.plgx.bundle
+        cosign sign-blob AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll --output AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll.bundle
+
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: |
-          AutoTypeSplitter.plgx
-          AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll
+          AutoTypeSplitter.plgx*
+          AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll*
 
