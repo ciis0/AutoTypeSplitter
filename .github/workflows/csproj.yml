@@ -18,6 +18,11 @@ jobs:
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
+
+    - name: keepass
+      run: |-
+        curl.exe -fsSL https://downloads.sourceforge.net/project/keepass/KeePass%202.x/2.57/KeePass-2.57.zip -o \Temp\KeePass.zip
+        Expand-Archive -Path \Temp\KeePass.zip -DestinationPath "C:\Program Files (x86)\KeePass Password Safe 2"
     
     - name: Build app for release
       run: msbuild AutoTypeSplitter/AutoTypeSplitter.csproj -t:rebuild -verbosity:diag -property:Configuration=Release
