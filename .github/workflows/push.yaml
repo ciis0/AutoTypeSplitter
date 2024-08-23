@@ -6,6 +6,9 @@ jobs:
 
   build:
   
+    permissions:
+      id-token: write # cosign oidc
+      
     runs-on: windows-latest
 
     steps:
@@ -43,8 +46,8 @@ jobs:
 
     - name: cosign
       run:
-        cosign sign-blob AutoTypeSplitter.plgx --output AutoTypeSplitter.plgx.bundle
-        cosign sign-blob AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll --output AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll.bundle
+        cosign sign-blob --yes AutoTypeSplitter.plgx --bundle AutoTypeSplitter.plgx.bundle
+        cosign sign-blob --yes AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll --bundle AutoTypeSplitter/bin/Release/AutoTypeSplitter.dll.bundle
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
